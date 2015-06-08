@@ -34,18 +34,20 @@ public class countGeneratorTest {
 //for bedTime starting point is bounded by 5:00 PM and 12:00 AM
 //Thus,the bedTime is started no Earlier than 5:00 PM for our calculation.
 	@Test
-	public void paidHoursCalculatedBefore12AM() throws Exception {
+	public void paidHoursCalculated() throws Exception {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
 		String bedTimePoint = "2001.09.01 9:49 PM";
 		String startTimePoint = "2001.09.01 4:49 PM";
-		String EndTime = "2001.09.02 3:49 AM";
+		String endTimePoint = "2001.09.02 3:49 AM";
 		Date Midnight = formatter.parse("2001.09.02 12:00 AM");
 		Date startTime = new countGenerator().getTimePoint(startTimePoint," 5:00 PM","Start");
 		Date bedTime = new countGenerator().getTimePoint(bedTimePoint," 5:00 PM","Start");
-		Date finishedTime = new countGenerator().getTimePoint(EndTime," 4:00 AM","End");
+		Date finishedTime = new countGenerator().getTimePoint(endTimePoint," 4:00 AM","End");
 		assertEquals(4, new countGenerator().getTimeDiffereces(startTime,bedTime));
 		assertEquals(2, new countGenerator().getTimeDiffereces(bedTime,Midnight));		
 		assertEquals(3, new countGenerator().getTimeDiffereces(Midnight,finishedTime));
+		assertEquals(112, new countGenerator().getPaid(startTimePoint,bedTimePoint,endTimePoint));
 	}
+	
 }
 

@@ -56,4 +56,38 @@ public Date getTimePoint(String t, String dateBound, String bound){
 		return null;
 	}
 
+public int getPaid(String startTimePoint, String bedTimePoint,String endTimePoint) throws Exception {
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
+	Date startTime = getTimePoint(startTimePoint," 5:00 PM","Start");
+	Date bedTime = getTimePoint(bedTimePoint," 5:00 PM","Start");
+	Date finishedTime = getTimePoint(endTimePoint," 4:00 AM","End");
+	String[] split = endTimePoint.split(" ");
+	Date midnight = null;
+	try {
+		midnight = format.parse(split[0] + " 12:00 AM");
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+	int paidBeforeBedTime = 0;
+	int paidDuringBedTime = 0;
+	int paidDuringlateNightTime = 0; 
+	if (getTimeDiffereces(startTime,bedTime)>0)
+	{ 
+		int beforeBedTime = getTimeDiffereces(startTime,bedTime);
+		paidBeforeBedTime = 12*beforeBedTime;
+	}
+	if (getTimeDiffereces(bedTime,midnight)>0)
+	{
+		int BedTime = getTimeDiffereces(bedTime,midnight);
+		paidDuringBedTime = 8*BedTime;
+	}
+	if (getTimeDiffereces(midnight,finishedTime)>0)
+	{
+		int lateNightTime = getTimeDiffereces(midnight,finishedTime);
+		paidDuringlateNightTime = 16*lateNightTime;
+	}
+		return paidBeforeBedTime + paidDuringBedTime + paidDuringlateNightTime;
+}
+
+
 }
