@@ -8,14 +8,15 @@ public class countGenerator {
 	//String time1;
 	//String time2;
 	//String EarliestStartingTime = " 5:00 PM";
+	
 	SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
 	public int getStartingTimeFromInput(int i) {
 		return 5;
 	}
 
-public int getTimeDiffereces(String time1, String time2) throws Exception{
-			Date date1 = format.parse(time1);
-			Date date2 = format.parse(time2);
+public int getTimeDiffereces(Date date1, Date date2) throws Exception{
+			//Date date1 = format.parse(time1);
+			//Date date2 = format.parse(time2);
 			long difference = date2.getTime() - date1.getTime();
 			return (int) (difference/1000/60/60);			
 		}
@@ -54,5 +55,5 @@ public Date getTimePoint(String t, String dateBound, String bound){
 		}
 		return null;
 	}
-	
+
 }
