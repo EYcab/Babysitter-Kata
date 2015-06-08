@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
+
 import org.junit.Test;
 
 
@@ -18,11 +20,13 @@ public class countGeneratorTest {
 	}
 	@Test
 	public void startsNoEarlierThan5PM() throws Exception {
-		assertEquals("5:00 PM", new countGenerator().getStartingTimeCheck("2001.09.01 4:49 PM"));
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
+		assertEquals(formatter.parse("2001.09.01 5:00 PM"), new countGenerator().getTimePoint("2001.09.01 4:49 PM"," 5:00 PM","Start"));
 	} 
 	@Test
 	public void startsNolaterThan4AM() throws Exception {
-		assertEquals("4:00 AM", new countGenerator().getEndingTimeCheck("2001.09.02 4:15 AM"));
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
+		assertEquals(formatter.parse("2001.09.02 4:00 AM"), new countGenerator().getTimePoint("2001.09.02 4:13 PM"," 4:00 AM","End"));	
 	} 
 	
 }
