@@ -5,23 +5,21 @@ import java.util.Date;
 	 
 
 public class countGenerator {
-	//String time1;
-	//String time2;
-	//String EarliestStartingTime = " 5:00 PM";
-	
 	SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
-	public int getStartingTimeFromInput(int i) {
-		return 5;
-	}
-
-public int getTimeDiffereces(Date date1, Date date2) throws Exception{
-			//Date date1 = format.parse(time1);
-			//Date date2 = format.parse(time2);
+public int getTimeDifferences(Date date1, Date date2) throws Exception{
 			long difference = date2.getTime() - date1.getTime();
-			return (int) (difference/1000/60/60);			
+			if (difference>0)
+			{
+			//return the hours recorded for hourly pay.
+			return (int) (difference/1000/60/60);
+			}
+			else {
+			return 0;
+			}
 		}
 
-
+//t is for the actual operating time point, dataBound is set for the period,i.e. the ealiest starting time.
+//Bound is defined for the kind of operation,either "Start" or "End" to check if the time read in is mismatched.
 public Date getTimePoint(String t, String dateBound, String bound){
 	Date inputDate = null;
 	try {
@@ -55,9 +53,8 @@ public Date getTimePoint(String t, String dateBound, String bound){
 		}
 		return null;
 	}
-
+//All time point record the real service time  
 public int getPaid(String startTimePoint, String bedTimePoint,String endTimePoint) throws Exception {
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
 	Date startTime = getTimePoint(startTimePoint," 5:00 PM","Start");
 	Date bedTime = getTimePoint(bedTimePoint," 5:00 PM","Start");
 	Date finishedTime = getTimePoint(endTimePoint," 4:00 AM","End");
@@ -71,22 +68,20 @@ public int getPaid(String startTimePoint, String bedTimePoint,String endTimePoin
 	int paidBeforeBedTime = 0;
 	int paidDuringBedTime = 0;
 	int paidDuringlateNightTime = 0; 
-	if (getTimeDiffereces(startTime,bedTime)>0)
-	{ 
-		int beforeBedTime = getTimeDiffereces(startTime,bedTime);
-		paidBeforeBedTime = 12*beforeBedTime;
+//Amount paid for before bed time
+	paidBeforeBedTime = 12*getTimeDifferences(startTime,bedTime);
+//BedTime Paid amount
+//StartTime could be later than bedTime
+	if (getTimeDifferences(startTime,bedTime) == 0){
+	paidDuringBedTime = 8*getTimeDifferences(startTime,midnight);
 	}
-	if (getTimeDiffereces(bedTime,midnight)>0)
-	{
-		int BedTime = getTimeDiffereces(bedTime,midnight);
-		paidDuringBedTime = 8*BedTime;
+	else{
+	paidDuringBedTime = 8*getTimeDifferences(bedTime,midnight);
 	}
-	if (getTimeDiffereces(midnight,finishedTime)>0)
-	{
-		int lateNightTime = getTimeDiffereces(midnight,finishedTime);
-		paidDuringlateNightTime = 16*lateNightTime;
-	}
-		return paidBeforeBedTime + paidDuringBedTime + paidDuringlateNightTime;
+//late Night Paid amount
+	paidDuringlateNightTime = 16*getTimeDifferences(midnight,finishedTime);
+//Total amount calculated	
+	return paidBeforeBedTime + paidDuringBedTime + paidDuringlateNightTime;
 }
 
 
